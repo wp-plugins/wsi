@@ -11,6 +11,9 @@ class WsiBack {
 	 */
 	private static $_instance = null;
 	private function __construct() {}
+	/**
+	 * @return WsiBack
+	 */
 	public static function getInstance() {
 		if(is_null(self::$_instance)) {
 			self::$_instance = new WsiBack();
@@ -173,9 +176,7 @@ class WsiBack {
 		}
 		$systemInfos.= "\n";
 		$systemInfos.= "-- Paramétrage WSI --\n";
-		foreach (WsiCommons::getOptionsList() as $option) {
-			$systemInfos.= $option.": ".get_option($option)."\n";
-		}
+		$systemInfos.= SplashImageManager::getInstance()->getInfos();
 			
 		$systemInfos.= "</pre>";
 		return $systemInfos; 
@@ -202,6 +203,8 @@ class WsiBack {
 			case 'feedback'  : require("actions/FeedbackAction.inc.php");  $feedbacked = true;  break;
 			case 'uninstall' : require("actions/UninstallAction.inc.php"); $uninstalled = true; break;
 		}
+		
+		$siBean = SplashImageManager::getInstance()->get();
 		
 	?>
 	
@@ -234,7 +237,7 @@ class WsiBack {
 			</div>
 		</div>
 
-		<!-- Reset -->
+		<!-- Logo Reset -->
 		<div id="display_reset">
 			<form method="post" action="<?php echo $_SERVER ['REQUEST_URI']?>">
 				<?php wp_nonce_field('reset','nonce_reset_field'); ?>
@@ -247,14 +250,23 @@ class WsiBack {
 			</div>
 		</div>
 		
+		<!-- Logo GitHub -->
+		<a href="https://github.com/Agent-22/WP-Splash-Image" target="_blank">
+			<img id="github_img1" rel="#github" alt="github" src="<?php echo WsiCommons::getURL(); ?>/style/github/ForkMe_Blk.png" />
+			<img id="github_img2" rel="#github" alt="github" src="<?php echo WsiCommons::getURL(); ?>/style/github/ForkMe_Wht.png" />
+		</a>
+		
+		
+		
 		<h2>WP Splash Image</h2>
 		
 		<!-- Information message -->
-		<?php if ($feedbacked) { ?>
-			<div id="message" class="updated fade"><p><strong><?php echo __("Thank's for your feedback...",'wp-splash-image'); ?></p></strong></div>
-		<?php } else if ($updated) { ?>
-			<div id="message" class="updated fade"><p><strong><?php echo __('Options Updated...','wp-splash-image'); ?></p></strong></div>
-		<?php } ?>
+		<?php if ($feedbacked) { WsiCommons::showMessage(__("Thank's for your feedback...",'wp-splash-image')); } ?>
+		<?php if ($updated) { WsiCommons::showMessage(__('Options Updated...','wp-splash-image')); } ?>
+		<?php if (WsiCommons::has_a_new_version()) { WsiCommons::showMessage(
+				__('A new version of "WP Splash Image" is out !','wp-splash-image').
+				" (<a href='".WsiCommons::getUpdateURL()."'>".__('update automatically','wp-splash-image')."</a>)"
+		); } ?>
 	
 		<!-- ------ -->
 		<!-- Forms  -->
@@ -281,12 +293,12 @@ class WsiBack {
 			<?php if ($_POST['wsi_type'] != "") { ?>
 				var wsi_type = '<?php echo $_POST['wsi_type']; ?>';
 				<?php $wsi_type = $_POST['wsi_type']; ?>
-			<?php } else if(get_option('wsi_type') != "") { ?>	
-				var wsi_type = '<?php echo esc_attr(get_option('wsi_type')); ?>';
-				<?php $wsi_type = esc_attr(get_option('wsi_type')); ?>
+			<?php } else if($siBean->getWsi_type() != "") { ?>	
+				var wsi_type = '<?php echo $siBean->getWsi_type(); ?>';
+				<?php $wsi_type = $siBean->getWsi_type(); ?>
 			<?php } else { ?>
 				var wsi_type = 'picture';
-				<?php $wsi_type = esc_attr(get_option('wsi_type')); ?>
+				<?php $wsi_type = $siBean->getWsi_type(); ?>
 			<?php } ?>
 			
 			// Chargement des onglets
@@ -345,6 +357,14 @@ class WsiBack {
 			// Activation du tooltip de "Uninstall"
 			$('#uninstall_img').tooltip();
 
+			// GitHub effect.
+			$('#github_img1').mouseover(function() {
+				  $('#github_img2').fadeIn("400");
+			});
+			$('#github_img2').mouseout(function() {
+				  $('#github_img2').fadeOut("400");
+			});
+			
 			// Activation du tooltip de "Reset"
 			$('#reset_img').tooltip();
 			
@@ -403,8 +423,8 @@ class WsiBack {
 			// Fill Picture size
 			$("#fill_picture_size_button").click(function() {
 				$("#img_splash_image").attr("src", $("#url_splash_image").val());
-				$("#splash_image_height").val($("#img_splash_image").attr("height"));
-				$("#splash_image_width").val($("#img_splash_image").attr("width"));
+				$("#splash_image_height").val($("#img_splash_image").height());
+				$("#splash_image_width").val($("#img_splash_image").width());
 			});
 
 			// Splash Color field management

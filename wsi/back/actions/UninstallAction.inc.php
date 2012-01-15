@@ -8,7 +8,7 @@ $list_options = WsiCommons::getOptionsList();
 
 $uninstalled_message .= '<p>';
 foreach($list_options as $option) {
-	$delete_option = delete_option($option);
+	$delete_option = SplashImageManager::getInstance()->delete($option);
 	if($delete_option) {
 		$uninstalled_message .= '<font color="green">';
 		$uninstalled_message .= sprintf(__('Setting Key \'%s\' has been deleted.', 'wp-splash-image'), "<strong><em>{$option}</em></strong>");
@@ -20,11 +20,5 @@ foreach($list_options as $option) {
 	}
 }
 $uninstalled_message .= '</p>';
-
-// Find uninstall URL
-$deactivate_url = 'plugins.php?action=deactivate&plugin=wsi%2Fwp-splash-image.php&plugin_status=all&paged=1';
-if(function_exists('wp_nonce_url')) {
-	$deactivate_url = wp_nonce_url($deactivate_url, 'deactivate-plugin_wsi/wp-splash-image.php');
-}
 
 ?>
