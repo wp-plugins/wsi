@@ -300,12 +300,13 @@ class WsiBack {
 			index_tab["metacafe"]    = 1;
 			index_tab["swf"]         = 1;
 			index_tab["html"]        = 2;
-			
-			$("ul.tabs").tabs("div.panes > div", {
+			index_tab["include"]     = 3;
+
+			// new tabs
+			$(function() {$("#tabs").tabs({
 				// Ouverture du bon onglet au démarrage
-				effect: 'default', //TODO: Make my own effect : http://flowplayer.org/tools/tabs/index.html#effects
-				initialIndex: index_tab[wsi_type]
-			});
+				selected: index_tab[wsi_type]
+			});});
 			
 			// Gestion de l'affichage de la zone "block_splash_test_active"
 			if($("#splash_active").attr("checked")=="checked") {$("#block_splash_test_active").css("display","table-row");}
@@ -409,6 +410,7 @@ class WsiBack {
 			$("#radio_metacafe").click(function() {    color_box("#box_metacafe")});
 			$("#radio_swf").click(function() {         color_box("#box_swf")});
 			$("#radio_html").click(function() {        color_box("#box_html")});
+			$("#radio_include").click(function() {     color_box("#box_include")});
 			
 			// Color au chargement du plugin
 			$("#box_<?php echo $wsi_type; ?>").animate({ backgroundColor: "#D9FFB2" }, 500);
@@ -434,9 +436,6 @@ class WsiBack {
 			$('#splash_image_height').keyfilter(/[\d\.]/);
 			$('#splash_image_width').keyfilter(/[\d\.]/);
 
-			// new tabs
-			$(function() {$("#tabs").tabs();});
-			
 		});
 	</script>
 
