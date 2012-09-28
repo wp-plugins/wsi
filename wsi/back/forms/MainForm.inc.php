@@ -1,7 +1,13 @@
 <h3><?php echo __('Configuration','wp-splash-image'); ?></h3>
+
+<!-- Infos -->
+<?php //echo $this->get_system_info(); ?>
+
 <form method="post" action="<?php echo $_SERVER ['REQUEST_URI']?>">
 	<?php wp_nonce_field('update','nonce_update_field'); ?>
 	<input type="hidden" name="action" value="update" />
+	<?php /* TODO: lorsqu'il y aura plusieurs splash screen, gérer cet ID */ ?>
+	<input type="hidden" name="id" value="1" />
 	<table>
 		<tr>
 			<td><?php echo __('Splash image activated','wp-splash-image'); ?>:</td>
@@ -9,7 +15,7 @@
 				type="checkbox" 
 				name="splash_active" 
 				id="splash_active" 
-				<?php if($siBean->isSplash_active()=='true') {echo("checked='checked'");} ?> /></td>
+				<?php if($configBean->isSplash_active()=='true') {echo("checked='checked'");} ?> /></td>
 		</tr>
 		<tr>
 		<td><?php echo __('First load mode activated','wp-splash-image'); ?>:</td>
@@ -17,7 +23,7 @@
 				type="checkbox" 
 				name="wsi_first_load_mode_active"
 				id="wsi_first_load_mode_active" 
-				<?php if($siBean->isWsi_first_load_mode_active()=='true') {echo("checked='checked'");} ?> />
+				<?php if($configBean->isWsi_first_load_mode_active()=='true') {echo("checked='checked'");} ?> />
 				
 				<img id="wsi_first_load_mode_info" alt="<?php echo __('Uninstall','wp-splash-image'); ?>" src="<?php echo WsiCommons::getURL(); ?>/style/info-16px.png" />	
 				<div class="tooltipLarge">
@@ -28,15 +34,6 @@
 				</div>
 				
 			</td>
-		</tr>
-		<tr id="block_splash_test_active">
-			<td><?php echo __('Test mode activated','wp-splash-image'); ?>:</td>
-			<td><input 
-				type="checkbox" 
-				name="splash_test_active" 
-				id="splash_test_active" 
-				<?php if($siBean->isSplash_test_active()=='true') {echo("checked='checked'");} ?> />
-				<?php echo __('(for tests only, open splash image whenever)','wp-splash-image'); ?></td>
 		</tr>
 	</table>
 	<br />
@@ -63,6 +60,7 @@
 			<td><input 
 				type="checkbox" 
 				name="wsi_close_esc_function" 
+				id="wsi_close_esc_function" 
 				<?php if($siBean->isWsi_close_esc_function()=='true') {echo("checked='checked'");} ?> />
 				(<?php echo __('if you click on background','wp-splash-image'); ?>)</td>
 		</tr>
@@ -71,6 +69,7 @@
 			<td><input 
 				type="checkbox" 
 				name="wsi_hide_cross" 
+				id="wsi_hide_cross" 
 				<?php if($siBean->isWsi_hide_cross()=='true') {echo("checked='checked'");} ?> /></td>
 		</tr>
 		<tr>
@@ -78,6 +77,7 @@
 			<td><input
 				type="checkbox" 
 				name="wsi_disable_shadow_border" 
+				id="wsi_disable_shadow_border" 
 				<?php if($siBean->isWsi_disable_shadow_border()=='true') {echo("checked='checked'");} ?> />
 				(<?php echo __('useful for images with transparent edges','wp-splash-image'); ?>)</td>
 		</tr>
@@ -86,6 +86,7 @@
 			<td><input
 				type="checkbox" 
 				name="wsi_fixed_splash" 
+				id="wsi_fixed_splash" 
 				<?php if($siBean->isWsi_fixed_splash()=='true') {echo("checked='checked'");} ?> />
 				<?php echo __('fix the splashcreen to scrollbars','wp-splash-image'); ?>
 				(<?php echo __('useful for images with big size','wp-splash-image'); ?>)</td>
@@ -146,7 +147,7 @@
 				type="date" 
 				name="datepicker_start" 
 				id="datepicker_start" 
-				value="<?php echo $siBean->getDatepicker_start(); ?>" />&nbsp;
+				value="<?php echo date_create($siBean->getDatepicker_start())->format('Y-m-d'); ?>" />&nbsp;
 				<?php echo __('(stay empty if not required)','wp-splash-image'); ?></td>
 			<td style="width:15px;"></td>
 			<td rowspan="2" style="padding:10px;border:2px solid #FF0000;display:none;background-color:#ff8b88" id="box_datepickers_warning">
@@ -160,9 +161,19 @@
 				type="date" 
 				name="datepicker_end" 
 				id="datepicker_end" 
-				value="<?php echo $siBean->getDatepicker_end(); ?>" />&nbsp;
+				value="<?php echo date_create($siBean->getDatepicker_end())->format('Y-m-d'); ?>" />&nbsp;
 				<?php echo __('(stay empty if not required)','wp-splash-image'); ?></td>
 			<td colspan="2"></td>
+		</tr>
+		<tr>
+			<td><?php echo __('Display always','wp-splash-image'); ?>:</td>
+			<td><input
+				type="checkbox" 
+				name="wsi_display_always" 
+				id="wsi_display_always" 
+				<?php if($siBean->isWsi_display_always()=='true') {echo("checked='checked'");} ?> />
+				<?php echo __('Display the splash image on each pages for each users (not recommended for comfort of users).','wp-splash-image'); ?>
+			</td>
 		</tr>
 		<tr id="block_idle_time">
 			<td><?php echo __('Idle time','wp-splash-image'); ?>:</td>
@@ -177,5 +188,10 @@
 			</td>
 		</tr>
 	</table>
-	<p class="submit"><input type="submit" value="<?php echo __('Update Options','wp-splash-image'); ?>" /></p>
+	<p class="submit">
+		<input type="submit" class="button-primary" value="<?php echo __('Update'); ?>" />
+		<input id="live_preview_button" type="button" value="<?php echo __( 'Live Preview' ); ?>" />
+	</p>
+	<div id="live_preview_div"></div>
+
 </form>

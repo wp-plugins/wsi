@@ -1,3 +1,4 @@
+
 <!-- ------------------- -->
 <!-- Documentation Form  -->
 <!-- ------------------- -->
@@ -32,9 +33,7 @@
 	<br />
 	If we fill the <span class="plugin_title"><?php echo __('Display time','wp-splash-image'); ?></span> field, the splash screen disappear after this value (in second).
 	<br />
-
 	<p>
 		<?php echo __('For information:','wp-splash-image'); ?> <a target="_blank" href="http://fr.wikipedia.org/wiki/Splash_screen">Splash Screen</a>
 	</p>
-	
 </div>

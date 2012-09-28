@@ -44,25 +44,26 @@ class WsiFront {
 	public function wsi_first_load_mode_div() {
 
 		// Chargement des données en base
-		$siBean = SplashImageManager::getInstance()->get();
+		$configBean = ConfigManager::getInstance()->get();
+		$siBean = SplashImageManager::getInstance()->get(1);
 		
 		// Si le plugin n'est pas activé dans ses options, on ne fait rien
-		if($siBean->isSplash_active()!='true') return;
+		if($configBean->isSplash_active()!='true') return;
 		
 		// If not in First Load Mode, exit the function
-		if ($siBean->isWsi_first_load_mode_active()!='true') return;
+		if ($configBean->isWsi_first_load_mode_active()!='true') return;
 		
-		// Si on est pas en "mode test", on effectue quelques tests supplémentaires
-		if($siBean->isSplash_test_active()!='true') {
+		// Si la Splash Image n'est pas dans sa plage de validité, on ne fait rien
+		if (WsiCommons::getdate_is_in_validities_dates() == "false") return;
 		
-			// Si la Splash Image n'est pas dans sa plage de validité, on ne fait rien
-			if (WsiCommons::getdate_is_in_validities_dates() == "false") return;
-		
+		// If wsi_display_always option is activated, not paying attention to idle time
+		if ($siBean->isWsi_display_always()!='true') {
+
 			// Si l'utilisateur n'a pas été inactif assez longtemps, on ne fait rien
 			if(WsiCommons::enough_idle_to_splash($this->last_display)==false) return;
 		
 		}
-		
+
 		require("splash/noConflict.inc.php");
 		require("splash/overlay.inc.php");
 		require("splash/content.inc.php");
@@ -105,25 +106,26 @@ class WsiFront {
 	public function wsi_addSplashImageWpHead() {
 		
 		// Chargement des données en base
-		$siBean = SplashImageManager::getInstance()->get();
+		$configBean = ConfigManager::getInstance()->get();
+		$siBean = SplashImageManager::getInstance()->get(1);
 		
 		// Si le plugin n'est pas activé dans ses options, on ne fait rien
-		if($siBean->isSplash_active()!='true') return;
+		if($configBean->isSplash_active()!='true') return;
 		
 		// If not in First Load Mode, exit the function
-		if ($siBean->isWsi_first_load_mode_active()=='true') return;
+		if ($configBean->isWsi_first_load_mode_active()=='true') return;
 		
-		// Si on est pas en "mode test", on effectue quelques tests supplémentaires
-		if($siBean->isSplash_test_active()!='true') {
+		// Si la Splash Image n'est pas dans sa plage de validité, on ne fait rien
+		if (WsiCommons::getdate_is_in_validities_dates() == "false") return;
+		
+		// If wsi_display_always option is activated, not paying attention to idle time
+		if ($siBean->isWsi_display_always()!='true') {
 
-			// Si la Splash Image n'est pas dans sa plage de validité, on ne fait rien
-			if (WsiCommons::getdate_is_in_validities_dates() == "false") return;
-			
 			// Si l'utilisateur n'a pas été inactif assez longtemps, on ne fait rien
- 			if(WsiCommons::enough_idle_to_splash($this->last_display)==false) return;
-			
+			if(WsiCommons::enough_idle_to_splash($this->last_display)==false) return;
+		
 		}
-
+			
 		require("splash/noConflict.inc.php");
 		require("splash/overlay.inc.php");
 		
@@ -135,23 +137,24 @@ class WsiFront {
 	public function wsi_addSplashImageWpFooter() {
 	
 		// Chargement des données en base
-		$siBean = SplashImageManager::getInstance()->get();
+		$configBean = ConfigManager::getInstance()->get();
+		$siBean = SplashImageManager::getInstance()->get(1);
 		
 		// Si le plugin n'est pas activé dans ses options, on ne fait rien
-		if($siBean->isSplash_active()!='true') return;
+		if($configBean->isSplash_active()!='true') return;
 		
 		// If not in First Load Mode, exit the function
-		if ($siBean->isWsi_first_load_mode_active()=='true') return;
-	
-		// Si on est pas en "mode test", on effectue quelques tests supplémentaires
-		if($siBean->isSplash_test_active()!='true') {
+		if ($configBean->isWsi_first_load_mode_active()=='true') return;
 		
-			// Si la Splash Image n'est pas dans sa plage de validité, on ne fait rien
-			if (WsiCommons::getdate_is_in_validities_dates() == "false") return;
-	
+		// Si la Splash Image n'est pas dans sa plage de validité, on ne fait rien
+		if (WsiCommons::getdate_is_in_validities_dates() == "false") return;
+
+		// If wsi_display_always option is activated, not paying attention to idle time
+		if ($siBean->isWsi_display_always()!='true') {
+
 			// Si l'utilisateur n'a pas été inactif assez longtemps, on ne fait rien
- 			if(WsiCommons::enough_idle_to_splash($this->last_display)==false) return;
-	
+			if(WsiCommons::enough_idle_to_splash($this->last_display)==false) return;
+		
 		}
 
 		require("splash/content.inc.php");
