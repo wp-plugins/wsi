@@ -11,6 +11,10 @@
 	height:20px;
 	margin-bottom:-4px;
 }
+.esc_button {
+	height:20px;
+	margin-bottom:-4px;	
+}
 
 #tabs {
 	width:750px;
@@ -65,4 +69,8 @@
 
 #info_img, #feedback_img, #buyMeABeer_img {
 	cursor: pointer;
+}
+
+.warning {
+	font-weight:bold;
 }
