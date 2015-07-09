@@ -11,9 +11,9 @@
 	    <?php break; case "youtube": ?>
 
 			<object width="<?php echo $_POST['splash_image_width']; ?>" height="<?php echo $_POST['splash_image_height']; ?>">
-				<param name="movie" value="http://www.youtube.com/v/<?php echo $_POST['wsi_youtube']; ?>&hl=en_US&fs=1&rel=0"></param>
-				<param name="allowFullScreen" value="true"></param>
-				<param name="allowscriptaccess" value="always"></param>
+				<param name="movie" value="http://www.youtube.com/v/<?php echo $_POST['wsi_youtube']; ?>&hl=en_US&fs=1&rel=0" />
+				<param name="allowFullScreen" value="true" />
+				<param name="allowscriptaccess" value="always" />
 				<embed src="http://www.youtube.com/v/<?php echo $_POST['wsi_youtube']; ?>&hl=en_US&fs=1&rel=0<?php if($_POST['wsi_youtube_autoplay']=='true'){ ?>&autoplay=1<?php } if($_POST['wsi_youtube_loop']=='true'){ ?>&loop=1<?php } ?>" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="<?php echo $_POST['splash_image_width']; ?>" height="<?php echo $_POST['splash_image_height']; ?>"></embed>
 			</object>
 			    
@@ -30,9 +30,9 @@
 		<?php break; case "dailymotion": ?>
 		
 			<object width="<?php echo $_POST['splash_image_width']; ?>" height="<?php echo $_POST['splash_image_height']; ?>">
-				<param name="movie" value="http://www.dailymotion.com/swf/video/<?php echo $_POST['wsi_dailymotion']; ?>"></param>
-				<param name="allowFullScreen" value="true"></param>
-				<param name="allowScriptAccess" value="always"></param>
+				<param name="movie" value="http://www.dailymotion.com/swf/video/<?php echo $_POST['wsi_dailymotion']; ?>" />
+				<param name="allowFullScreen" value="true" />
+				<param name="allowScriptAccess" value="always" />
 				<embed type="application/x-shockwave-flash" src="http://www.dailymotion.com/swf/video/<?php echo $_POST['wsi_dailymotion']; ?>" width="<?php echo $_POST['splash_image_width']; ?>" height="<?php echo $_POST['splash_image_height']; ?>" allowfullscreen="true" allowscriptaccess="always"></embed>
 			</object>
 			
@@ -101,12 +101,11 @@
 
 <script type="text/javascript">
 
-	<?/* No Conflict */?>
-	var $j = jQuery.noConflict();
+    jQuerySplash(document).ready(function () {
 
-	$j(document).ready(function () {
 		<?/* Splash Image */?>
-		$j("#splashLink").overlay({
+
+		jQuerySplash("#splashLink").overlay({
 			mask: {
 				color: '#<?php echo $_POST["splash_color"]; ?>',
 				opacity: <?php echo $_POST['wsi_opacity']/100; ?> 
@@ -119,25 +118,25 @@
 
 		<?/* Autoclose de la Splash Image */?>
 		<?php if ($_POST["wsi_display_time"] > 0) { ?>
-			setTimeout("$j('#miesSPLASH').fadeOut()",<?php echo $_POST["wsi_display_time"]; ?>000);
-			setTimeout("$j('#exposeMask').fadeOut()",<?php echo $_POST["wsi_display_time"]; ?>000);
+			setTimeout("jQuerySplash('#miesSPLASH').fadeOut()",<?php echo $_POST["wsi_display_time"]; ?>000);
+			setTimeout("jQuerySplash('#exposeMask').fadeOut()",<?php echo $_POST["wsi_display_time"]; ?>000);
 		<?php } ?>
 
 		<?/* On masque la croix en haut à droite si besoin */?>
 		<?php if($_POST['wsi_hide_cross']=='true') { ?>
-			$j('.simple_overlay .close').css('display','none');
+			jQuerySplash('.simple_overlay .close').css('display','none');
 		<?php } ?>
 		
 		<?/* On masque la bordure d'ombre si besoin */?>
 		<?php if($_POST['wsi_disable_shadow_border']=='true') { ?>
-			$j('.simple_overlay').css('-moz-box-shadow','none');
-			$j('.simple_overlay').css('-webkit-box-shadow','none');
-			$j('.simple_overlay').css('box-shadow','none');
+			jQuerySplash('.simple_overlay').css('-moz-box-shadow','none');
+			jQuerySplash('.simple_overlay').css('-webkit-box-shadow','none');
+			jQuerySplash('.simple_overlay').css('box-shadow','none');
 		<?php } ?>
 
 		<?/* On modifie la marge supperieur si elle est precisee */?>
 		<?php if($_POST['wsi_margin_top']!='') { ?>
-			$j('.simple_overlay').css('margin-top','<?php echo $_POST["wsi_margin_top"]; ?>px');
+			jQuerySplash('.simple_overlay').css('margin-top','<?php echo $_POST["wsi_margin_top"]; ?>px');
 		<?php } ?>
 		
 	});
